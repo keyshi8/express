@@ -3,21 +3,22 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const expressLayouts = require("express-ejs-layouts");
+const expressLayouts = require("express-ejs-layouts"); // impor modul express-ejs-layouts
 const connectDB = require("./app_api/models/db")
 
 var indexRouter = require('./app_server/routes/index');
+const fakultasRouter = require('./app_server/routes/fakultas')
 var usersRouter = require('./app_server/routes/users');
 var prodiRouter = require('./app_server/routes/prodi');
-
-const fakultasRouter = require('./app_api/routes/fakultas');
-const prodiapiRouter = require('./app_api/routes/prodi');
+const fakultasRouterApi = require('./app_api/routes/fakultas');
+const prodiRouterApi = require('./app_api/routes/prodi');
 
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'app_server', 'views'));
+app.set('views', path.join(__dirname, 'app_server' , 'views'));
 app.set('view engine', 'ejs');
+app.set('layout', 'main'); // Menetapkan main.ejs sebagai layout default
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -27,11 +28,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressLayouts);
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/fakultas', fakultasRouter);
 app.use('/prodi', prodiRouter);
-app.use('/api/fakultas', fakultasRouter);
-app.use('/api/prodi', prodiapiRouter);
+app.use('/users', usersRouter);
+// API
+app.use('/api/fakultas', fakultasRouterApi);
+app.use('/api/prodi', prodiRouterApi);
 
+// Connect to MongoDB
 connectDB();
 
 // catch 404 and forward to error handler
