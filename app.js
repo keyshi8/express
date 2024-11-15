@@ -13,6 +13,11 @@ var prodiRouter = require('./app_server/routes/prodi');
 const fakultasRouterApi = require('./app_api/routes/fakultas');
 const prodiRouterApi = require('./app_api/routes/prodi');
 
+const authRouterApi = require('./app_api/routes/auth');
+
+require("dotenv").config();
+
+
 var app = express();
 
 // view engine setup
@@ -31,9 +36,11 @@ app.use('/', indexRouter);
 app.use('/fakultas', fakultasRouter);
 app.use('/prodi', prodiRouter);
 app.use('/users', usersRouter);
+
 // API
 app.use('/api/fakultas', fakultasRouterApi);
 app.use('/api/prodi', prodiRouterApi);
+app.use('/api/auth', authRouterApi);
 
 // Connect to MongoDB
 connectDB();
