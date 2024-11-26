@@ -1,53 +1,54 @@
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs"); // Menginpor bcryptjs untuk memverifikasi password
 const jwt = require("jsonwebtoken");
-const User = require("../models/user");
+const User = require("../models/user"); 
 
 exports.register = async (req, res) => {
-    const {name, email, password, role} = req.body;
+    const { name, email, password, role } = req.body; // Mendapatkan data dari body permintaan
 
     try {
-        let user = await user.findOne({email});
+        let user = await User.findOne({email}); // Mengecek apakah pengguna sudah ada 
         if (user) {
-            return res.status(400).json({ message: "User already exist"});
+            return res.status(400).json({message: "User already exists"}); 
         }
+        
+        user = new User({name, email, password, role }); // Membuat pengguna baru dengan data yang diberikan 
+        await user.save(); // Menyimpan pengguna baru ke database
 
-        user = new User({name, email, password, role});
-        await user.save();
-
-        const payload = { userId: user.id, role: user.role};
-        const token = jwt.sign(payload, procces.env.JWT_SECRET,{
+        const payload = {userId: user.id, role: user.role}; // Membuat payload untuk token
+        const token = jwt.sign(payload, process.env.JWT_SECRET, {
             expiresIn: "1h",
-        });
-        res.json({ token});
-    } catch (error){
-        res.status(500).json({ message: error.message});
+        }); // Membuat JWT token
+
+        res.json({token}); // Mengirim token sebagai respons
+    } catch (error) {
+        res.status(500).json({message: error.message }); // Mengirim pesan error jika ada
     }
 };
 
+
 exports.login = async (req, res) => {
     const { email, password } = req.body; // Mendapatkan email dan password dari body permintaan
-    
+
     try {
-        const user = await User.findOne({email}); // Mencari pengguna berdasarkan email
+        const user = await User.findOne({ email }); // Mencari pengguna berdasarkan email
         if (!user) {
             // Jika pengguna tidak ditemukan
-            return res.status(400).json({message: "Invalid email or password" }); // Kirim pesan error
+            return res.status(400).json({ message: "Invalid email or password"}) //
         }
-        
-        const isMatch = await bcrypt.compare(password, user.password); // Menbandingkan password 
-        if (isMatch) {
+
+        const isMatch = await bcrypt.compare (password, user.password);
+        if (!isMatch) {
             // Jika password tidak cocok
-            return res.status(400).json({message: "Invalid email or password" }); // Kirim pesan error 
+            return res.status(400).json({ message: "Invalid email or password"}) // kirim pesan error
         }
-        
-        const payload = {userId: user.id, role: user.role}; // Membuat payload token dengan ID dan role pengguna
+
+        const payload = { userId: user.id, role: user.role }; // Membuat payload untuk token
         const token = jwt.sign(payload, process.env.JWT_SECRET, {
-            expiresin: "1h",
-        });
-        
-        res.json({token}); // Mengirim token sebagai respons
+            expiresIn: "1h",
+        }); // Membuat JWT token
+
+        res.json ({ token }); // Mengirim token sebagai respons
     } catch (error) {
-    
-    res.status(500).json({message: error.message }); // Kirim pesan error jika ada masalah server
+        res.status(500).json({ message: error.message}) // Mengirim pesan error jika ada masalah server
     }
 };
