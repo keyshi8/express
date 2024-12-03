@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const expressLayouts = require("express-ejs-layouts"); // impor modul express-ejs-layouts
 const connectDB = require("./app_api/models/db")
+const cors = require("cors");
 
 var indexRouter = require('./app_server/routes/index');
 const fakultasRouter = require('./app_server/routes/fakultas')
@@ -32,6 +33,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressLayouts);
+app.use(cors());
+
 
 app.use('/', indexRouter);
 app.use('/fakultas', fakultasRouter);
