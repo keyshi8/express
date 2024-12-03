@@ -6,10 +6,10 @@ const authMiddleware = require("../middleware/authMiddleware");
 const roleMiddleware = require("../middleware/roleMiddleware");
 
 // Route untuk mendapatkan semua data mahasiswa
-router.get("/", authMiddleware, mahasiswaController.getAllMahasiswa);
+router.get("/", mahasiswaController.getAllMahasiswa);
 
 // Route untuk mendapatkan data mahasiswa berdasarkan ID
-router.get("/:id", authMiddleware, mahasiswaController.getMahasiswaById);
+router.get("/:id", mahasiswaController.getMahasiswaById);
 
 // Route untuk menambahkan data mahasiswa baru, termasuk upload file foto
 router.post("/", authMiddleware, roleMiddleware("admin"), upload.single("foto"), mahasiswaController.createMahasiswa);
