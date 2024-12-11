@@ -2,7 +2,7 @@
 const express = require("express");
 // Membuat instance router dari express
 const router = express.Router();
-// Mengimpor Controller fakultas untuk menangani logika bisnis
+// Mengimpor Controller prodi untuk menangani logika bisnis
 const prodiController = require("../controllers/prodiController");
 
 // Definisi rute untuk fakultas
