@@ -15,9 +15,9 @@ router.get("/:id", mahasiswaController.getMahasiswaById);
 router.post("/", upload.single("foto"), mahasiswaController.createMahasiswa);
 
 // Route untuk memperbarui data mahasiswa, dengan upload foto opisional
-router.put("/:id", authMiddleware, roleMiddleware("admin"), upload.single("foto"), mahasiswaController.updateMahasiswa);
+router.put("/:id", upload.single("foto"), mahasiswaController.updateMahasiswa);
 
 // Route untuk menghapus data mahasiswa berdasarkan ID
-router.delete("/:id", authMiddleware, roleMiddleware("admin"), mahasiswaController.deleteMahasiswa);
+router.delete("/:id", mahasiswaController.deleteMahasiswa);
 
 module.exports = router;
